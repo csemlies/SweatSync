@@ -10,9 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_07_033157) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_07_033443) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "invite_links", force: :cascade do |t|
+    t.bigint "plan_session_id"
+    t.string "token"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["plan_session_id"], name: "index_invite_links_on_plan_session_id"
+  end
 
   create_table "plan_sessions", force: :cascade do |t|
     t.string "title"
@@ -29,7 +37,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_07_033157) do
     t.bigint "plan_session_id"
     t.bigint "user_id"
     t.string "role"
-    t.datetime "joined_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["plan_session_id"], name: "index_session_members_on_plan_session_id"
@@ -185,6 +192,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_07_033157) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "invite_links", "plan_sessions"
   add_foreign_key "session_members", "plan_sessions"
   add_foreign_key "session_members", "users"
   add_foreign_key "solid_queue_blocked_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
