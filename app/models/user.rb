@@ -9,4 +9,5 @@
 #  updated_at   :datetime         not null
 #
 class User < ApplicationRecord
+  has_many :busy_blocks, dependent: :destroy
 end

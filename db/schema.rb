@@ -10,9 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_07_033443) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_10_170702) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "busy_blocks", force: :cascade do |t|
+    t.bigint "plan_session_id"
+    t.bigint "user_id"
+    t.datetime "start_dt"
+    t.datetime "end_dt"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["plan_session_id", "start_dt"], name: "index_busy_blocks_on_plan_session_id_and_start_dt"
+    t.index ["plan_session_id", "user_id"], name: "index_busy_blocks_on_plan_session_id_and_user_id"
+    t.index ["plan_session_id"], name: "index_busy_blocks_on_plan_session_id"
+    t.index ["user_id"], name: "index_busy_blocks_on_user_id"
+  end
 
   create_table "invite_links", force: :cascade do |t|
     t.bigint "plan_session_id"
@@ -31,6 +44,38 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_07_033443) do
     t.string "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "recommended_classes", force: :cascade do |t|
+    t.bigint "plan_session_id"
+    t.bigint "studio_class_id"
+    t.integer "rank"
+    t.integer "score"
+    t.text "rationale"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["plan_session_id", "studio_class_id"], name: "idx_unique_recommendations", unique: true
+    t.index ["plan_session_id"], name: "index_recommended_classes_on_plan_session_id"
+    t.index ["studio_class_id"], name: "index_recommended_classes_on_studio_class_id"
+  end
+
+  create_table "recommended_classes_available_members", force: :cascade do |t|
+    t.bigint "recommended_class_id"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["recommended_class_id", "user_id"], name: "idx_unique_reco_members", unique: true
+    t.index ["recommended_class_id"], name: "idx_on_recommended_class_id_13cc39c8bd"
+    t.index ["user_id"], name: "index_recommended_classes_available_members_on_user_id"
+  end
+
+  create_table "session_days", force: :cascade do |t|
+    t.bigint "plan_session_id"
+    t.date "day_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["plan_session_id", "day_date"], name: "index_session_days_on_plan_session_id_and_day_date", unique: true
+    t.index ["plan_session_id"], name: "index_session_days_on_plan_session_id"
   end
 
   create_table "session_members", force: :cascade do |t|
@@ -185,6 +230,31 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_07_033443) do
     t.index ["key"], name: "index_solid_queue_semaphores_on_key", unique: true
   end
 
+  create_table "studio_classes", force: :cascade do |t|
+    t.bigint "studio_id"
+    t.string "class_name"
+    t.string "instructor"
+    t.datetime "start_dt"
+    t.datetime "end_dt"
+    t.string "difficulty"
+    t.string "modality"
+    t.string "source_url"
+    t.datetime "scraped_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["scraped_at"], name: "index_studio_classes_on_scraped_at"
+    t.index ["studio_id", "start_dt"], name: "index_studio_classes_on_studio_id_and_start_dt"
+    t.index ["studio_id"], name: "index_studio_classes_on_studio_id"
+  end
+
+  create_table "studios", force: :cascade do |t|
+    t.string "name"
+    t.string "location"
+    t.string "source_url"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "phone_number"
@@ -192,7 +262,14 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_07_033443) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "busy_blocks", "plan_sessions"
+  add_foreign_key "busy_blocks", "users"
   add_foreign_key "invite_links", "plan_sessions"
+  add_foreign_key "recommended_classes", "plan_sessions"
+  add_foreign_key "recommended_classes", "studio_classes"
+  add_foreign_key "recommended_classes_available_members", "recommended_classes"
+  add_foreign_key "recommended_classes_available_members", "users"
+  add_foreign_key "session_days", "plan_sessions"
   add_foreign_key "session_members", "plan_sessions"
   add_foreign_key "session_members", "users"
   add_foreign_key "solid_queue_blocked_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
@@ -201,4 +278,5 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_07_033443) do
   add_foreign_key "solid_queue_ready_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_recurring_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_scheduled_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
+  add_foreign_key "studio_classes", "studios"
 end
