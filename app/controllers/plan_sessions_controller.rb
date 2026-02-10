@@ -27,6 +27,6 @@ class PlanSessionsController < ApplicationController
   private
 
   def plan_session_params
-    params.require(:plan_session).permit(:name, :window_type, :start_date, :end_date)
+    params.require(:plan_session).permit(:title, :window_type, :start_date, :end_date)
   end
 end
