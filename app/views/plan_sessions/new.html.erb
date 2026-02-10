@@ -1,0 +1,28 @@
+<h1>Create a Session</h1>
+
+<%= form_with model: @plan_session do |f| %>
+  <p>
+    <%= f.label :name, "Session name" %><br>
+    <%= f.text_field :name, required: true %>
+  </p>
+
+  <p>
+    <%= f.label :window_type, "Timeframe" %><br>
+    <%= f.select :window_type,
+      [["Full week", "full_week"], ["Selected days", "selected_days"], ["Single day", "single_day"]],
+      include_blank: "Choose one",
+      required: true %>
+  </p>
+
+  <p>
+    <%= f.label :start_date %><br>
+    <%= f.date_field :start_date, required: true %>
+  </p>
+
+  <p>
+    <%= f.label :end_date %><br>
+    <%= f.date_field :end_date, required: true %>
+  </p>
+
+  <%= f.submit "Create Session" %>
+<% end %>
