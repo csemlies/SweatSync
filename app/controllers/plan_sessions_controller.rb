@@ -22,6 +22,7 @@ class PlanSessionsController < ApplicationController
   def show
     @plan_session = PlanSession.find(params[:id])
     @invite_link = InviteLink.find_by!(plan_session_id: @plan_session.id)
+    @join_url = join_url(token: @invite_link.token)
   end
 
   private

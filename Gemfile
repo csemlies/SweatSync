@@ -55,6 +55,7 @@ gem "dotenv"                          # Load environment variables from .env
 gem "http"                            # Simple HTTP client for APIs
 gem "rollbar"                         # Error tracking in production
 gem "appdev_support"                  # Learning helpers (nicer error messages, etc.)
+gem "rqrcode", require: "rqrcode"
 
 # ==============================================================================
 # Feature Gems - AI

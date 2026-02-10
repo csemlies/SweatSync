@@ -9,4 +9,9 @@
 
 <h3>Invite</h3>
 <p>Token: <strong><%= @invite_link.token %></strong></p>
-<p>Join link: <%= join_url(token: @invite_link.token) %></p>
+<p>Join link: <%= @join_url %></p>
+
+<% qr = ::RQRCode::QRCode.new(@join_url) %>
+<div style="margin-top:16px; max-width:260px;">
+  <%= raw qr.as_svg(module_size: 6) %>
+</div>
