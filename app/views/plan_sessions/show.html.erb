@@ -1,17 +1,17 @@
-<h1><%= @plan_session.title %></h1>
-
-<p>
-  Timeframe: <strong><%= @plan_session.window_type %></strong><br>
-  Dates: <strong><%= @plan_session.start_date %></strong> to <strong><%= @plan_session.end_date %></strong>
-</p>
-
 <hr>
 
-<h3>Invite</h3>
-<p>Token: <strong><%= @invite_link.token %></strong></p>
-<p>Join link: <%= @join_url %></p>
+<h3>Invite Friends</h3>
 
-<% qr = ::RQRCode::QRCode.new(@join_url) %>
+<p>
+  Share this link or QR code with your friends so they can join this session
+  and enter their availability. 
+</p>
+
+<p>
+  <strong>Let’s sweat together.Scan or tap to join.</strong><br>
+  <%= @join_url %>
+</p>
+
 <div style="margin-top:16px; max-width:260px;">
-  <%= raw qr.as_svg(module_size: 6) %>
+  <%= raw RQRCode::QRCode.new(@join_url).as_svg(module_size: 6) %>
 </div>
