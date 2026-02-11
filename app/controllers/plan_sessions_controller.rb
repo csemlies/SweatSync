@@ -6,7 +6,7 @@ class PlanSessionsController < ApplicationController
   def create
     @plan_session = PlanSession.new(plan_session_params)
 
-    creator = User.first # MVP placeholder
+    creator = User.first || User.create!(phone_number: "0000000000")
     @plan_session.created_by_user_id = creator.id if @plan_session.respond_to?(:created_by_user_id=)
 
     if @plan_session.save

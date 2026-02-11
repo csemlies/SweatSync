@@ -8,9 +8,12 @@
   <%= form_with url: join_path, method: :post do %>
     <%= hidden_field_tag :token, @token %>
 
+    <label>Name</label><br>
+    <%= text_field_tag :name, nil, placeholder: "Charlotte" %>
+
     <div style="margin-top:12px;">
       <label>Phone number</label><br>
-      <%= text_field_tag :phone_number, nil, placeholder: "3125551234" %>
+      <%= text_field_tag :phone_number, nil, placeholder: "5162424073" %>
     </div>
 
     <div style="margin-top:12px;">

@@ -1,0 +1,29 @@
+<p>
+  <%= link_to "← Back to session", plan_session_path(@plan_session) %>
+</p>
+
+<h1>Add your busy times</h1>
+
+<p>
+  Session: <strong><%= @plan_session.title %></strong><br>
+  You: <strong><%= @user.phone_number %></strong>
+</p>
+
+<%= form_with url: busy_blocks_path, method: :post do %>
+  <%= hidden_field_tag :plan_session_id, @plan_session.id %>
+  <%= hidden_field_tag :user_id, @user.id %>
+
+  <div style="margin-top:12px;">
+    <label>Start</label><br>
+    <%= datetime_local_field_tag "busy_block[start_dt]" %>
+  </div>
+
+  <div style="margin-top:12px;">
+    <label>End</label><br>
+    <%= datetime_local_field_tag "busy_block[end_dt]" %>
+  </div>
+
+  <div style="margin-top:16px;">
+    <%= submit_tag "Save busy time" %>
+  </div>
+<% end %>
