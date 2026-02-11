@@ -1,0 +1,20 @@
+<h1>Join a Session</h1>
+
+<% if @invite_link.nil? %>
+  <p>Invalid or expired invite token.</p>
+<% else %>
+  <p>You’re joining: <strong><%= @plan_session.title %></strong></p>
+
+  <%= form_with url: join_path, method: :post do %>
+    <%= hidden_field_tag :token, @token %>
+
+    <div style="margin-top:12px;">
+      <label>Phone number</label><br>
+      <%= text_field_tag :phone_number, nil, placeholder: "3125551234" %>
+    </div>
+
+    <div style="margin-top:12px;">
+      <%= submit_tag "Join Session" %>
+    </div>
+  <% end %>
+<% end %>
