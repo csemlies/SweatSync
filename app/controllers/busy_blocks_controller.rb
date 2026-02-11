@@ -1,31 +1,28 @@
 class BusyBlocksController < ApplicationController
   def new
     @plan_session = PlanSession.find(params[:plan_session_id])
-    @user = User.find(params[:user_id])
+    @user = User.find(params[:user_id]) # MVP placeholder
 
     @busy_blocks = BusyBlock.where(plan_session: @plan_session, user: @user).order(:start_dt)
 
-    # Always show a Mon–Sun week that contains the session start_date
+    # Build the week grid (Mon–Sun of the week containing the session start)
     week_start = @plan_session.start_date.beginning_of_week(:monday)
     @days = (0..6).map { |i| week_start + i.days }
 
-    # Time rows (6:00 AM -> 9:30 PM in 30-min steps)
-    day = Time.zone.local(week_start.year, week_start.month, week_start.day)
-    start_time = day + 6.hours
-    end_time   = day + 22.hours # 10:00 PM (last slot starts 9:30)
-
+    # Times down the left side (30-min slots). Adjust hours if you want.
+    start_hour = 6
+    end_hour = 22
     @times = []
-    t = start_time
-    while t < end_time
+    t = Time.zone.local(2000, 1, 1, start_hour, 0)
+    while t.hour < end_hour
       @times << t
       t += 30.minutes
-      end
     end
   end
 
   def bulk_create
     plan_session = PlanSession.find(params[:plan_session_id])
-    user = User.find(params[:user_id])
+    user = User.find(params[:user_id]) # MVP placeholder
 
     starts = JSON.parse(params[:starts].presence || "[]")
     duration_min = params[:duration_min].to_i
@@ -50,6 +47,7 @@ class BusyBlocksController < ApplicationController
     plan_session = PlanSession.find(params[:plan_session_id])
     block = BusyBlock.find(params[:id])
 
+    # safety: only delete if it belongs to this session
     unless block.plan_session_id == plan_session.id
       head :unprocessable_entity and return
     end
