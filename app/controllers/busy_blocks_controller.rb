@@ -2,6 +2,13 @@ class BusyBlocksController < ApplicationController
   def new
     @plan_session = PlanSession.find(params[:plan_session_id])
     @user = User.find(params[:user_id])
+
+    # Use the session start_date to decide which week to show (Mon–Sun)
+    session_start = @plan_session.start_date.to_date
+    @week_start = session_start.beginning_of_week(:monday)
+    @week_days = (0..6).map { |i| @week_start + i.days }
+
+    @busy_blocks = BusyBlock.where(plan_session: @plan_session, user: @user).order(:start_dt)
   end
 
   def create
@@ -15,8 +22,7 @@ class BusyBlocksController < ApplicationController
       end_dt: params[:busy_block][:end_dt]
     )
 
-    # send them back so they can add more
     redirect_to new_busy_block_path(plan_session_id: plan_session.id, user_id: user.id),
-                notice: "Saved! Add another busy time (or go back to the session)."
+                notice: "Saved! Click more slots to add more busy times."
   end
 end
