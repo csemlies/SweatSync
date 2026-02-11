@@ -10,3 +10,18 @@
  */
 
 @import "custom-image.css";
+
+.slot {
+  background: #fff;
+  cursor: pointer;
+}
+
+.slot.is-selected {
+  background: #dbeafe;  /* light blue while selecting */
+}
+
+.slot.is-busy {
+  background: #111827;  /* dark saved busy */
+  color: white;
+  cursor: not-allowed;
+}

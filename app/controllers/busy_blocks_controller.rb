@@ -1,28 +1,32 @@
 class BusyBlocksController < ApplicationController
-  def new
+  def index
     @plan_session = PlanSession.find(params[:plan_session_id])
-    @user = User.find(params[:user_id])
 
-    # Use the session start_date to decide which week to show (Mon–Sun)
-    session_start = @plan_session.start_date.to_date
-    @week_start = session_start.beginning_of_week(:monday)
-    @week_days = (0..6).map { |i| @week_start + i.days }
+    # MVP placeholder: however you're getting the current user
+    @user = User.find(params[:user_id]) # OR session[:user_id], etc.
 
     @busy_blocks = BusyBlock.where(plan_session: @plan_session, user: @user).order(:start_dt)
   end
 
-  def create
+  def bulk_create
     plan_session = PlanSession.find(params[:plan_session_id])
-    user = User.find(params[:user_id])
+    user = User.find(params[:user_id]) # MVP placeholder
 
-    BusyBlock.create!(
-      plan_session: plan_session,
-      user: user,
-      start_dt: params[:busy_block][:start_dt],
-      end_dt: params[:busy_block][:end_dt]
-    )
+    starts = JSON.parse(params[:starts].presence || "[]")
+    duration_min = params[:duration_min].to_i
 
-    redirect_to new_busy_block_path(plan_session_id: plan_session.id, user_id: user.id),
-                notice: "Saved! Click more slots to add more busy times."
+    starts.each do |start_iso|
+      start_dt = Time.iso8601(start_iso)
+      end_dt = start_dt + duration_min.minutes
+
+      BusyBlock.create!(
+        plan_session: plan_session,
+        user: user,
+        start_dt: start_dt,
+        end_dt: end_dt
+      )
+    end
+
+    redirect_to plan_session_busy_blocks_path(plan_session, user_id: user.id), notice: "Busy times saved!"
   end
 end
