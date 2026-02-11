@@ -25,3 +25,5 @@
   color: white;
   cursor: not-allowed;
 }
+
+.slot.is-disabled { background: #f3f4f6; color: #9ca3af; cursor: not-allowed; }
