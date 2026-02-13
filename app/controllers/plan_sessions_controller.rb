@@ -8,6 +8,8 @@ class PlanSessionsController < ApplicationController
   def create
     creator = User.first || User.create!(phone_number: "0000000000")
 
+    session[:user_id] = creator.id
+
     @plan_session = PlanSession.find_or_create_by!(
       created_by_user_id: creator.id,
       title: plan_session_params[:title],
@@ -34,14 +36,20 @@ class PlanSessionsController < ApplicationController
     @invite_link = InviteLink.find_by!(plan_session_id: @plan_session.id)
     @join_url = join_url(token: @invite_link.token)
 
-    @current_user = User.first
     @members = User.joins(:session_members)
                    .where(session_members: { plan_session_id: @plan_session.id })
+
+    @creator = User.find_by(id: @plan_session.created_by_user_id)
+
+    # ✅ ADD THIS LINE
+    @current_user = User.find_by(id: session[:user_id])
   end
 
   # ✅ MUST be above `private`
   def recommendations
     @plan_session = PlanSession.find(params[:id])
+
+    @current_user = User.find_by(id: session[:user_id])  # ✅ ADD THIS
 
     @members = User.joins(:session_members)
                    .where(session_members: { plan_session_id: @plan_session.id })

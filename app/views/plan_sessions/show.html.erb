@@ -25,11 +25,22 @@
 
 <h3>Members</h3>
 <ul>
-  <% @members.each do |m| %>
+  <% @members.each_with_index do |m, idx| %>
     <li>
-      <%= m.name.presence || m.phone_number %>
-      (<%= link_to "edit busy times",
-          new_plan_session_busy_block_path(@plan_session, user_id: m.id) %>)
+      <% label =
+     if @current_user&.id == m.id
+       "You"
+     elsif m.name.present?
+       m.name
+     else
+       "Member #{idx + 1}"
+     end
+%>
+
+      <%= label %>
+      <% if m.id == @creator&.id %>
+        <span style="color:#666;">(Host)</span>
+      <% end %>
     </li>
   <% end %>
 </ul>

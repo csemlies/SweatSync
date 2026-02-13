@@ -21,6 +21,8 @@ class InvitesController < ApplicationController
     # Add as member (avoid duplicates)
     SessionMember.find_or_create_by!(plan_session: plan_session, user: user)
 
+    session[:user_id] = user.id
+
     redirect_to new_plan_session_busy_block_path(plan_session, user_id: user.id),
             notice: "You're in! Add your busy times."
   end
