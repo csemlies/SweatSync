@@ -13,7 +13,9 @@
 #  created_by_user_id :integer
 #
 class PlanSession < ApplicationRecord
-  has_many :session_days, dependent: :destroy
+  has_many :session_members, dependent: :destroy
+  has_many :users, through: :session_members
+
   has_many :busy_blocks, dependent: :destroy
-  has_many :recommended_classes, dependent: :destroy
 end
+

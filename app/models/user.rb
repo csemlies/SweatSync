@@ -10,4 +10,8 @@
 #
 class User < ApplicationRecord
   has_many :busy_blocks, dependent: :destroy
+
+  has_many :session_members, dependent: :destroy
+  has_many :plan_sessions, through: :session_members
 end
+

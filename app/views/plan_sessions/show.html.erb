@@ -15,3 +15,19 @@
 <div style="margin-top:16px; max-width:260px;">
   <%= raw RQRCode::QRCode.new(@join_url).as_svg(module_size: 6) %>
 </div>
+
+<%= link_to "See recommended classes", recommendations_plan_session_path(@plan_session), class: "btn" %>
+
+<%= link_to "Add / edit my busy times",
+            new_plan_session_busy_block_path(@plan_session, user_id: @current_user.id) %>
+
+<h3>Members</h3>
+<ul>
+  <% @members.each do |m| %>
+    <li>
+      <%= m.name.presence || m.phone_number %>
+      (<%= link_to "edit busy times",
+          new_plan_session_busy_block_path(@plan_session, user_id: m.id) %>)
+    </li>
+  <% end %>
+</ul>

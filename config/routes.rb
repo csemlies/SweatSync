@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
   # sessions (PlanSession)
   resources :plan_sessions, path: "sessions" do
+    get :recommendations, on: :member
     # busy blocks calendar + bulk save + delete
     resources :busy_blocks, only: [:new, :create, :destroy] do
       collection do

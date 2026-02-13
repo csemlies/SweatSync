@@ -1,0 +1,44 @@
+<%= link_to "← Back to session", plan_session_path(@plan_session) %>
+
+<h1>Recommended classes</h1>
+
+<p>
+  Session: <strong><%= @plan_session.title %></strong><br>
+  Members: <%= @members.map(&:name).compact_blank.join(", ") %>
+</p>
+
+<h2>Top 3</h2>
+
+<% @top3.each do |row| %>
+  <% c = row[:studio_class] %>
+  <div style="border:1px solid #ddd; padding:12px; margin:12px 0; border-radius:8px;">
+    <div style="font-size:18px;"><strong><%= c.class_name %></strong></div>
+    <div><%= c.start_dt.strftime("%a %m/%d %-I:%M %p") %> – <%= c.end_dt.strftime("%-I:%M %p") %></div>
+    <div>Instructor: <%= c.instructor %></div>
+    <div style="margin-top:6px;">
+      Available: <strong><%= row[:available_count] %>/<%= @members.count %></strong>
+      (<%= row[:available_users].map(&:name).join(", ") %>)
+    </div>
+  </div>
+<% end %>
+
+<h2>All options (ranked)</h2>
+<table style="border-collapse:collapse; width:100%;">
+  <thead>
+    <tr>
+      <th style="border-bottom:1px solid #ddd; text-align:left; padding:8px;">Time</th>
+      <th style="border-bottom:1px solid #ddd; text-align:left; padding:8px;">Class</th>
+      <th style="border-bottom:1px solid #ddd; text-align:left; padding:8px;">Available</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @ranked.each do |row| %>
+      <% c = row[:studio_class] %>
+      <tr>
+        <td style="padding:8px;"><%= c.start_dt.strftime("%a %-I:%M %p") %></td>
+        <td style="padding:8px;"><%= c.class_name %> (<%= c.instructor %>)</td>
+        <td style="padding:8px;"><%= row[:available_count] %>/<%= @members.count %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
