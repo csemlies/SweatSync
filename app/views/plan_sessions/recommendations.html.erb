@@ -19,6 +19,15 @@
       Available: <strong><%= row[:available_count] %>/<%= @members.count %></strong>
       (<%= row[:available_users].map(&:name).join(", ") %>)
     </div>
+
+    <!-- ✅ ADD THIS RIGHT HERE -->
+    <div style="margin-top:10px;">
+      <%= link_to "Book on CorePower",
+          "https://www.corepoweryoga.com/classes/west-loop",
+          target: "_blank",
+          style: "display:inline-block; padding:8px 12px; background:#111; color:white; text-decoration:none; border-radius:6px;" %>
+    </div>
+
   </div>
 <% end %>
 

@@ -2,12 +2,13 @@
 #
 # Table name: studios
 #
-#  id         :bigint           not null, primary key
-#  location   :string
-#  name       :string
-#  source_url :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id          :bigint           not null, primary key
+#  booking_url :string
+#  location    :string
+#  name        :string
+#  source_url  :string
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
 #
 class Studio < ApplicationRecord
   has_many :studio_classes, dependent: :destroy
