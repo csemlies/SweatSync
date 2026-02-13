@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_13_034206) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_13_045712) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -45,6 +45,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_13_034206) do
     t.string "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["created_by_user_id", "start_date", "end_date", "title"], name: "idx_unique_plan_sessions_creator_dates_title", unique: true
   end
 
   create_table "recommended_classes", force: :cascade do |t|

@@ -6,20 +6,27 @@ class PlanSessionsController < ApplicationController
   end
 
   def create
-    @plan_session = PlanSession.new(plan_session_params)
-
     creator = User.first || User.create!(phone_number: "0000000000")
-    @plan_session.created_by_user_id = creator.id if @plan_session.respond_to?(:created_by_user_id=)
 
-    if @plan_session.save
-      SessionMember.create!(plan_session: @plan_session, user: creator)
-      InviteLink.create!(plan_session: @plan_session, token: SecureRandom.alphanumeric(8).upcase)
-
-      redirect_to new_plan_session_busy_block_path(@plan_session, user_id: creator.id),
-                  notice: "Session created! Add your busy times."
-    else
-      render :new, status: :unprocessable_entity
+    @plan_session = PlanSession.find_or_create_by!(
+      created_by_user_id: creator.id,
+      title: plan_session_params[:title],
+      start_date: plan_session_params[:start_date],
+      end_date: plan_session_params[:end_date],
+    ) do |s|
+      s.window_type = plan_session_params[:window_type]
     end
+
+    # ensure creator is a member (don’t duplicate)
+    SessionMember.find_or_create_by!(plan_session: @plan_session, user: creator)
+
+    # ensure invite exists
+    InviteLink.find_or_create_by!(plan_session: @plan_session) do |inv|
+      inv.token = SecureRandom.alphanumeric(8).upcase
+    end
+
+    redirect_to new_plan_session_busy_block_path(@plan_session, user_id: creator.id),
+                notice: "Session ready!"
   end
 
   def show
@@ -27,6 +34,7 @@ class PlanSessionsController < ApplicationController
     @invite_link = InviteLink.find_by!(plan_session_id: @plan_session.id)
     @join_url = join_url(token: @invite_link.token)
 
+    @current_user = User.first
     @members = User.joins(:session_members)
                    .where(session_members: { plan_session_id: @plan_session.id })
   end

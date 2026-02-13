@@ -18,8 +18,10 @@
 
 <%= link_to "See recommended classes", recommendations_plan_session_path(@plan_session), class: "btn" %>
 
+<% user_id = @members.first&.id %>
 <%= link_to "Add / edit my busy times",
-            new_plan_session_busy_block_path(@plan_session, user_id: @current_user.id) %>
+            new_plan_session_busy_block_path(@plan_session, user_id: user_id),
+            class: "btn" if user_id.present? %>
 
 <h3>Members</h3>
 <ul>

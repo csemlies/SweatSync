@@ -12,10 +12,18 @@
 #  updated_at         :datetime         not null
 #  created_by_user_id :integer
 #
+# Indexes
+#
+#  idx_unique_plan_sessions_creator_dates_title  (created_by_user_id,start_date,end_date,title) UNIQUE
+#
 class PlanSession < ApplicationRecord
   has_many :session_members, dependent: :destroy
   has_many :users, through: :session_members
 
   has_many :busy_blocks, dependent: :destroy
-end
 
+  validates :title, presence: true
+  validates :title, uniqueness: { scope: [:start_date, :end_date, :created_by_user_id],
+                                case_sensitive: false }
+
+end

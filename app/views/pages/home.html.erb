@@ -17,3 +17,41 @@
   <li>Share a QR code with your friends so they can join!</li>
   <li>Everyone enters busy times, and we recommend the top 3 classes.</li>
 </ol>
+
+<h2>Your sessions</h2>
+
+<% if @sessions.any? %>
+  <% if @active_sessions.any? %>
+    <h3>Active</h3>
+    <ul>
+      <% @active_sessions.each do |s| %>
+        <li>
+          <strong><%= s.title %></strong>
+          (<%= s.start_date %> – <%= s.end_date %>)
+          |
+          <%= link_to "Continue (busy times)", new_plan_session_busy_block_path(s, user_id: @user.id) %>
+          |
+          <%= link_to "Recommendations", recommendations_plan_session_path(s) %>
+          |
+          <%= link_to "Session page", plan_session_path(s) %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <h3>All</h3>
+  <ul>
+    <% @sessions.each do |s| %>
+      <li>
+        <strong><%= s.title %></strong>
+        (<%= s.start_date %> – <%= s.end_date %>)
+        |
+        <%= link_to "Open", plan_session_path(s) %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No sessions yet.</p>
+<% end %>
+
+<p><%= link_to "Create a new session", new_plan_session_path %></p>
