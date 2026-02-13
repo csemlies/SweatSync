@@ -5,9 +5,14 @@ export default class extends Controller {
   static values = { busyStarts: Array, planSessionId: Number }
 
   connect() {
+    console.log("busy-calendar connected", {
+      planSessionId: this.planSessionIdValue,
+      slots: this.slotTargets.length,
+      hasDurationTarget: this.hasDurationTarget
+    })
+
     this.selected = new Set()
 
-    // mark already-saved busy blocks as dark (based on busyStartsValue passed from Rails)
     const saved = new Set(this.busyStartsValue || [])
     this.slotTargets.forEach((cell) => {
       const start = cell.dataset.start

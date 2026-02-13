@@ -12,10 +12,11 @@
 #
 # Indexes
 #
-#  index_busy_blocks_on_plan_session_id               (plan_session_id)
-#  index_busy_blocks_on_plan_session_id_and_start_dt  (plan_session_id,start_dt)
-#  index_busy_blocks_on_plan_session_id_and_user_id   (plan_session_id,user_id)
-#  index_busy_blocks_on_user_id                       (user_id)
+#  index_busy_blocks_on_plan_session_id                           (plan_session_id)
+#  index_busy_blocks_on_plan_session_id_and_start_dt              (plan_session_id,start_dt)
+#  index_busy_blocks_on_plan_session_id_and_user_id               (plan_session_id,user_id)
+#  index_busy_blocks_on_plan_session_id_and_user_id_and_start_dt  (plan_session_id,user_id,start_dt) UNIQUE
+#  index_busy_blocks_on_user_id                                   (user_id)
 #
 # Foreign Keys
 #

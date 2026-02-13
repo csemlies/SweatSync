@@ -17,6 +17,7 @@
 <div
   data-controller="busy-calendar"
   data-busy-calendar-plan-session-id-value="<%= @plan_session.id %>"
+  data-busy-calendar-busy-starts-value="<%= @busy_blocks.map { |b| b.start_dt.iso8601 }.to_json %>"
 >
 
   <label>Busy block length</label>
@@ -61,22 +62,22 @@
   <% slot = Time.zone.local(day.year, day.month, day.day, t.hour, t.min) %>
   <% busy = busy_by_start[slot.iso8601] %>
 
-  <% editable = (day >= @plan_session.start_date && day <= @plan_session.end_date) %>
+  <% editable = (day.to_date >= @plan_session.start_date && day.to_date <= @plan_session.end_date) %>
 
   <td
-    class="slot <%= "is-busy" if busy %> <%= "is-disabled" unless editable %>"
-    style="border:1px solid #ccc; padding:6px; text-align:center;"
-    <%= editable ? 'data-action="click->busy-calendar#toggle"' : "" %>
-    data-busy-calendar-target="slot"
-    data-start="<%= slot.iso8601 %>"
-    data-busy-id="<%= busy&.id %>"
-  >
-            <%= busy ? "✓" : (editable ? "+" : "—") %>
-          </td>
-        <% end %>
-      </tr>
-    <% end %>
-  </tbody>
+  class="slot <%= "is-busy" if busy %> <%= "is-disabled" unless editable %>"
+  style="border:1px solid #ccc; padding:6px; text-align:center;"
+  <% if editable %>data-action="click->busy-calendar#toggle"<% end %>
+          data-busy-calendar-target="slot"
+          data-start="<%= slot.iso8601 %>"
+          data-busy-id="<%= busy&.id %>"
+          >
+          <%= busy ? "✓" : (editable ? "+" : "—") %>
+        </td>
+      <% end %>
+    </tr>
+  <% end %>
+</tbody>
 </table>
 
 </div>

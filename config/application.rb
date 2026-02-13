@@ -23,6 +23,12 @@ module Rails8Template
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 8.0
 
+    # Set app-wide timezone 
+    config.time_zone = "Central Time (US & Canada)"
+
+    # Make ActiveRecord store times in local zone (optional but cleaner for MVP)
+    config.active_record.default_timezone = :local
+
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.

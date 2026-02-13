@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_10_170702) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_13_034206) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -22,6 +22,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_10_170702) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["plan_session_id", "start_dt"], name: "index_busy_blocks_on_plan_session_id_and_start_dt"
+    t.index ["plan_session_id", "user_id", "start_dt"], name: "index_busy_blocks_on_plan_session_id_and_user_id_and_start_dt", unique: true
     t.index ["plan_session_id", "user_id"], name: "index_busy_blocks_on_plan_session_id_and_user_id"
     t.index ["plan_session_id"], name: "index_busy_blocks_on_plan_session_id"
     t.index ["user_id"], name: "index_busy_blocks_on_user_id"
