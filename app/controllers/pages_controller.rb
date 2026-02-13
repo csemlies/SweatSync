@@ -1,13 +1,13 @@
 class PagesController < ApplicationController
   def home
-    @user = User.first
-    @sessions = if @user
-      PlanSession.joins(:session_members)
-                 .where(session_members: { user_id: @user.id })
-                 .order(created_at: :desc)
-    else
-      PlanSession.none
-    end
+  today = Date.current
+
+  @active_sessions = PlanSession.where("end_date >= ?", today)
+                                 .order(:start_date)
+
+  @past_sessions = PlanSession.where("end_date < ?", today)
+                               .order(start_date: :desc)
+end
 
     today = Date.current
     @active_sessions = @sessions.select do |s|
