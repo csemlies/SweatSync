@@ -28,19 +28,27 @@
   <% @members.each_with_index do |m, idx| %>
     <li>
       <% label =
-     if @current_user&.id == m.id
-       "You"
-     elsif m.name.present?
-       m.name
-     else
-       "Member #{idx + 1}"
-     end
-%>
+           if current_user && m.id == current_user.id
+             "You"
+           elsif m.name.present?
+             m.name
+           else
+             "Member #{idx + 1}"
+           end
+      %>
 
       <%= label %>
-      <% if m.id == @creator&.id %>
-        <span style="color:#666;">(Host)</span>
+      <% if @creator && m.id == @creator.id %>
+        <span class="muted">(Host)</span>
       <% end %>
     </li>
   <% end %>
 </ul>
+
+<% if current_user %>
+  <p class="muted">
+    <%= link_to "Add / edit my busy times",
+                new_plan_session_busy_block_path(@plan_session, user_id: current_user.id),
+                class: "secondary" %>
+  </p>
+<% end %>

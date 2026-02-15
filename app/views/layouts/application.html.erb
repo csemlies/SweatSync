@@ -1,55 +1,82 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Rails 8 Template" %></title>
+    <title><%= content_for(:title) || "SweatSync" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
     <%= yield :head %>
 
-    <%# PICO (lightweight CSS framework) - CDN, no build step %>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
     <meta name="color-scheme" content="light dark">
-
-    <%# Your app stylesheet comes AFTER pico so you can override pico styles %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
-
     <%= javascript_importmap_tags %>
-
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
   </head>
 
   <body>
+    <header class="container">
+      <nav>
+        <ul>
+          <li>
+            <a href="<%= root_path %>" style="text-decoration:none;">
+              <strong>SweatSync</strong>
+            </a>
+          </li>
+        </ul>
 
-    <nav class="container-fluid">
-      <ul>
-        <li>
-          <strong>
-            <%= link_to "SweatSync", root_path, style: "text-decoration:none;" %>
-          </strong>
-        </li>
-      </ul>
-
-      <ul>
-        <li><%= link_to "Home", root_path %></li>
-        <li><%= link_to "New Session", new_plan_session_path %></li>
-
-        <% if defined?(@plan_session) && @plan_session.present? %>
-          <li><%= link_to "Session", plan_session_path(@plan_session) %></li>
-        <% end %>
-      </ul>
-    </nav>
+        <ul>
+          <% if current_user.present? %>
+            <li><%= link_to "Profile", profile_path %></li>
+            <li><%= link_to "Sign out", sign_out_path, method: :delete %></li>
+          <% else %>
+            <li><%= link_to "Sign in", sign_in_path %></li>
+            <li><%= link_to "Sign up", sign_up_path %></li>
+          <% end %>
+        </ul>
+      </nav>
+    </header>
 
     <main class="container">
       <%= yield %>
     </main>
-
   </body>
+</html>
+
+<body>
+  <% if notice.present? %>
+    <div style="color: green">
+      <%= notice %>
+    </div>
+  <% end %>
+
+  <% if alert.present? %>
+    <div style="color: red">
+      <%= alert %>
+    </div>
+  <% end %>
+
+  <%= yield %>
+
+  <nav class="container-fluid">
+    <ul>
+      <li>
+        <strong><%= link_to "SweatSync", root_path, style: "text-decoration:none;" %></strong>
+      </li>
+    </ul>
+
+    <ul>
+      <li><%= link_to "Home", root_path %></li>
+
+      <% if defined?(@plan_session) && @plan_session.present? %>
+        <li><%= link_to "Current Session", plan_session_path(@plan_session) %></li>
+      <% end %>
+    </ul>
+  </nav>
+
+  <main class="container">
+    <%= yield %>
+  </main>
+
+</body>
 
 </html>
