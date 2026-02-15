@@ -1,21 +1,26 @@
 class ApplicationController < ActionController::Base
-  skip_forgery_protection
+  before_action :set_current_user
+  helper_method :current_user
 
-  # require login by default
-  before_action :authenticate_user!
-
-  # allow additional Devise params
   before_action :configure_permitted_parameters, if: :devise_controller?
+
+  private
+
+  def set_current_user
+    @current_user = User.find_by(id: session[:user_id]) || User.find_by(id: params[:user_id])
+  end
+
+  def current_user
+    @current_user
+  end
 
   protected
 
   def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:username, :avatar_url])
-    devise_parameter_sanitizer.permit(:account_update, keys: [:username, :avatar_url])
-  end
+    # sign_up params
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:username])
 
-  # optional: redirect after login
-  def after_sign_in_path_for(resource)
-    plan_sessions_path # or profile_path if you prefer
+    # account update params
+    devise_parameter_sanitizer.permit(:account_update, keys: [:username])
   end
 end

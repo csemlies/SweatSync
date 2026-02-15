@@ -1,7 +1,12 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, controllers: {
+  registrations: "users/registrations",
+  sessions: "users/sessions"
+}
 
-  # Optional: different root for signed-in users
+  # top-level root so root_path exists everywhere
+  root to: "pages#home"
+
   authenticated :user do
     root to: "plan_sessions#index", as: :authenticated_root
   end

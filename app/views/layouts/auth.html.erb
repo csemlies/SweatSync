@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SweatSync</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+
+  <!-- Pico (cdn) - you had this on application.html.erb -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+
+  <!-- Your compiled app CSS (ensure this is named/available) -->
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+
+  <!-- Importmap / JS -->
+  <%= javascript_importmap_tags %>
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+</head>
+
+<body>
+  <!-- header/nav: keep it small and consistent with application layout -->
+  <header class="container" style="margin-top: 1rem;">
+    <nav>
+      <ul>
+        <li><a href="<%= root_path %>"><strong>SweatSync</strong></a></li>
+
+        <% if user_signed_in? %>
+          <li style="float:right"><%= link_to "Sign out", destroy_user_session_path, method: :delete %></li>
+          <li style="float:right"><%= link_to "Edit profile", edit_user_registration_path %></li>
+          <li style="float:right"><%= link_to "Profile", profile_path %></li>
+        <% else %>
+          <li style="float:right"><%= link_to "Log in", new_user_session_path %></li>
+          <li style="float:right"><%= link_to "Sign up", new_user_registration_path %></li>
+        <% end %>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="container" style="margin-top: 2rem;">
+    <%= yield %>
+  </main>
+
+  <footer class="container" style="margin-top: 3rem;">
+    <!-- keep footer minimal or copy from app layout -->
+    <nav>
+      <ul>
+        <li><a href="<%= root_path %>">Home</a></li>
+      </ul>
+    </nav>
+  </footer>
+</body>
+</html>
