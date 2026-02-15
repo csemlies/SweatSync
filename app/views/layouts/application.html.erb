@@ -27,56 +27,54 @@
         <ul>
           <% if current_user.present? %>
             <li><%= link_to "Profile", profile_path %></li>
-            <li><%= link_to "Sign out", sign_out_path, method: :delete %></li>
+            <li><%= link_to "Edit profile", edit_user_registration_path %></li>
+
+            <!--
+              Devise sign-out: your tutorial asked you to set `config.sign_out_via = :get`
+              so this works without a JS method override. If you later switch to :delete,
+              change this to:
+              <%= link_to "Sign out", destroy_user_session_path, method: :delete %>
+            -->
+            <li><%= link_to "Sign out", destroy_user_session_path %></li>
           <% else %>
-            <li><%= link_to "Sign in", sign_in_path %></li>
-            <li><%= link_to "Sign up", sign_up_path %></li>
+            <li><%= link_to "Sign in", new_user_session_path %></li>
+            <li><%= link_to "Sign up", new_user_registration_path %></li>
           <% end %>
         </ul>
       </nav>
     </header>
 
+    <!-- flash messages -->
+    <% if notice.present? %>
+      <div style="color: green; margin: 0.5rem 1rem;">
+        <%= notice %>
+      </div>
+    <% end %>
+
+    <% if alert.present? %>
+      <div style="color: red; margin: 0.5rem 1rem;">
+        <%= alert %>
+      </div>
+    <% end %>
+
     <main class="container">
       <%= yield %>
     </main>
+
+    <footer class="container" style="margin-top: 2rem;">
+      <nav>
+        <ul>
+          <li><strong><%= link_to "SweatSync", root_path, style: "text-decoration:none;" %></strong></li>
+        </ul>
+
+        <ul>
+          <li><%= link_to "Home", root_path %></li>
+
+          <% if defined?(@plan_session) && @plan_session.present? %>
+            <li><%= link_to "Current Session", plan_session_path(@plan_session) %></li>
+          <% end %>
+        </ul>
+      </nav>
+    </footer>
   </body>
-</html>
-
-<body>
-  <% if notice.present? %>
-    <div style="color: green">
-      <%= notice %>
-    </div>
-  <% end %>
-
-  <% if alert.present? %>
-    <div style="color: red">
-      <%= alert %>
-    </div>
-  <% end %>
-
-  <%= yield %>
-
-  <nav class="container-fluid">
-    <ul>
-      <li>
-        <strong><%= link_to "SweatSync", root_path, style: "text-decoration:none;" %></strong>
-      </li>
-    </ul>
-
-    <ul>
-      <li><%= link_to "Home", root_path %></li>
-
-      <% if defined?(@plan_session) && @plan_session.present? %>
-        <li><%= link_to "Current Session", plan_session_path(@plan_session) %></li>
-      <% end %>
-    </ul>
-  </nav>
-
-  <main class="container">
-    <%= yield %>
-  </main>
-
-</body>
-
 </html>

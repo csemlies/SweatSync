@@ -1,4 +1,7 @@
 class PagesController < ApplicationController
+  # allow unauthenticated visitors to see the homepage
+  skip_before_action :authenticate_user!, only: [:home]
+
   def home
     today = Date.current
     sessions = PlanSession.order(created_at: :desc)
