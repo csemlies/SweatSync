@@ -1,71 +1,38 @@
-<header>
-  <hgroup>
+<div class="container">
+  <!-- Hero -->
+  <header>
     <h1>SweatSync</h1>
-    <p>Plan workouts with friends without the group chat chaos.</p>
-  </hgroup>
+    <p class="lead">Plan workouts with friends without the group chat chaos.</p>
+  </header>
 
-  <p>
-    <%= link_to "Create a session", new_plan_session_path, role: "button" %>
-  </p>
-</header>
-
-<section>
-  <h2>How it works</h2>
-
-  <div class="grid">
-    <article>
-      <h3>1. Create</h3>
-      <p>Pick a day or week to work out.</p>
-    </article>
-
-    <article>
-      <h3>2. Share</h3>
-      <p>Send your friends the QR link.</p>
-    </article>
-
-    <article>
-      <h3>3. Sweat</h3>
-      <p>We find the best class for everyone.</p>
-    </article>
-  </div>
-</section>
-
-<section>
-  <h2>Your sessions</h2>
-
-  <% if @active_sessions.any? %>
-    <h3>Active</h3>
+  <!-- How it works -->
+  <section>
+    <h2>How it works</h2>
 
     <div class="grid">
-      <% @active_sessions.each do |s| %>
-        <article>
-          <header>
-            <strong><%= s.title %></strong>
-            <small><%= s.start_date %> – <%= s.end_date %></small>
-          </header>
+      <article class="card">
+        <h3>1. Create</h3>
+        <p>Pick a day or week to work out.</p>
+      </article>
 
-          <footer>
-            <%= link_to "Open", plan_session_path(s), role: "button", class: "secondary" %>
-            <%= link_to "Recommendations", recommendations_plan_session_path(s), role: "button", class: "contrast" %>
-          </footer>
-        </article>
-      <% end %>
+      <article class="card">
+        <h3>2. Share</h3>
+        <p>Send your friends the QR link.</p>
+      </article>
+
+      <article class="card">
+        <h3>3. Sweat</h3>
+        <p>We find the best class for everyone.</p>
+      </article>
     </div>
-  <% end %>
+  </section>
 
-  <% if @past_sessions.any? %>
-    <h3>Expired</h3>
-    <ul>
-      <% @past_sessions.each do |s| %>
-        <li>
-          <%= s.title %> —
-          <%= link_to "View", plan_session_path(s) %>
-        </li>
-      <% end %>
-    </ul>
-  <% end %>
-
-  <% if @active_sessions.empty? && @past_sessions.empty? %>
-    <p><em>No sessions yet.</em></p>
-  <% end %>
-</section>
+  <!-- CTA: placed *after* How it works -->
+  <section style="margin-top: 2rem;">
+    <% if user_signed_in? %>
+      <%= link_to "Create a session", new_plan_session_path, role: "button", class: "contrast" %>    <% else %>
+      <!-- If user is not signed in, send to login, then they'll be able to create -->
+      <%= link_to "Create a session", new_user_registration_path, role: "button", class: "contrast" %>
+    <% end %>
+  </section>
+</div>

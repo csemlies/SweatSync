@@ -1,41 +1,65 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-<head>
-  <title>SweatSync</title>
-  <%= csrf_meta_tags %>
-  <%= csp_meta_tag %>
-  <%= stylesheet_link_tag "application", media: "all", "data-turbo-track": "reload" %>
-  <%= javascript_importmap_tags %>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-</head>
+  <head>
+    <title>SweatSync</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
 
-<body>
-  <header class="container" style="margin-top: 1rem; display:flex; align-items:center; justify-content:space-between;">
-    <div>
-      <a href="<%= root_path %>" style="text-decoration:none;"><strong>SweatSync</strong></a>
-    </div>
+    <!-- Pico CSS (CDN) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
 
-    <nav>
-      <% if user_signed_in? %>
-        <%= link_to "Profile", profile_path, style: "margin-right: 1rem;" %>
-        <%= link_to "Edit profile", edit_user_registration_path, style: "margin-right: 1rem;" %>
-        <%= link_to "Sign out", destroy_user_session_path, method: :delete %>
-      <% else %>
-        <%= link_to "Log in", new_user_session_path, style: "margin-right: 1rem;" %>
-        <%= link_to "Sign up", new_user_registration_path %>
+    <!-- app CSS / compiled assets -->
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body>
+    <!-- top nav -->
+    <header class="container" style="margin-top: 1rem;">
+      <nav role="navigation">
+        <ul>
+          <li><a href="<%= root_path %>" style="text-decoration:none;"><strong>SweatSync</strong></a></li>
+        </ul>
+
+        <ul style="float:right; list-style:none;">
+          <% if user_signed_in? %>
+            <li style="display:inline; margin-left:1rem;">
+              <%= link_to "Profile", profile_path %>
+            </li>
+            <li style="display:inline; margin-left:1rem;">
+              <%= link_to "Edit profile", edit_user_registration_path %>
+            </li>
+            <li style="display:inline; margin-left:1rem;">
+              <%= link_to "Sign out", destroy_user_session_path, method: :delete, data: { confirm: "Sign out?" } %>
+            </li>
+          <% else %>
+            <li style="display:inline; margin-left:1rem;">
+              <%= link_to "Log in", new_user_session_path %>
+            </li>
+            <li style="display:inline; margin-left:1rem;">
+              <%= link_to "Sign up", new_user_registration_path %>
+            </li>
+          <% end %>
+        </ul>
+      </nav>
+    </header>
+
+    <main class="container">
+      <% if flash.any? %>
+        <section>
+          <% flash.each do |k,v| %>
+            <div style="color: <%= (k == 'notice' ? 'green' : 'red') %>;"><%= v %></div>
+          <% end %>
+        </section>
       <% end %>
-    </nav>
-  </header>
 
-  <main class="container" style="margin-top: 2rem;">
-    <%= yield %>
-  </main>
+      <%= yield %>
+    </main>
 
-  <footer class="container" style="margin-top: 4rem; padding: 1rem 0; color:#666;">
-    <div style="display:flex; justify-content:space-between;">
-      <div><strong>SweatSync</strong></div>
-      <div><%= link_to "Home", root_path %></div>
-    </div>
-  </footer>
-</body>
+    <!-- footer (single copy, styled by Pico) -->
+    <footer class="container" style="margin-top: 2rem;">
+
+    </footer>
+  </body>
 </html>

@@ -1,5 +1,5 @@
-class UsersController < ApplicationController
-  def show    
-    @user = current_user || User.find(session[:user_id]) rescue nil
-  end
+# app/controllers/users_controller.rb
+def show
+  @user = User.find(params[:id])
+  @owned_sessions = @user.plan_sessions.order(start_time: :desc) 
 end
