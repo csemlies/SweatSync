@@ -1,54 +1,71 @@
-<h1>SweatSync</h1>
-<p>
-  Planning workouts with friends sounds easy, but it turns into a long text thread.
-  SweatSync gives you one shared place to see availability and get the best class options.
-</p>
+<header>
+  <hgroup>
+    <h1>SweatSync</h1>
+    <p>Plan workouts with friends without the group chat chaos.</p>
+  </hgroup>
 
-<hr style="margin:24px 0;">
+  <p>
+    <%= link_to "Create a session", new_plan_session_path, role: "button" %>
+  </p>
+</header>
 
-<h3>How it works</h3>
-<ol>
-  <li>Create a planning session for a day or week.</li>
-  <li>Share a QR code with your friends so they can join!</li>
-  <li>Everyone enters busy times, and we recommend the top 3 classes.</li>
-</ol>
+<section>
+  <h2>How it works</h2>
 
-<hr style="margin:24px 0;">
+  <div class="grid">
+    <article>
+      <h3>1. Create</h3>
+      <p>Pick a day or week to work out.</p>
+    </article>
 
-<div style="display:flex; gap:12px; margin-top:16px;">
-  <%= link_to "Create a Session!", new_plan_session_path, class: "btn" %>
-</div>
+    <article>
+      <h3>2. Share</h3>
+      <p>Send your friends the QR link.</p>
+    </article>
 
-<h2>Your sessions</h2>
+    <article>
+      <h3>3. Sweat</h3>
+      <p>We find the best class for everyone.</p>
+    </article>
+  </div>
+</section>
 
-<% if @active_sessions.any? %>
-  <h3>Active</h3>
-  <ul>
-    <% @active_sessions.each do |s| %>
-      <li>
-        <strong><%= s.title %></strong>
-        (<%= s.start_date %> – <%= s.end_date %>)
-        |
-        <%= link_to "Open", plan_session_path(s) %>
-      </li>
-    <% end %>
-  </ul>
-<% end %>
+<section>
+  <h2>Your sessions</h2>
 
-<% if @past_sessions.any? %>
-  <h3>Expired</h3>
-  <ul>
-    <% @past_sessions.each do |s| %>
-      <li>
-        <strong><%= s.title %></strong>
-        (<%= s.start_date %> – <%= s.end_date %>)
-        |
-        <%= link_to "View", plan_session_path(s) %>
-      </li>
-    <% end %>
-  </ul>
-<% end %>
+  <% if @active_sessions.any? %>
+    <h3>Active</h3>
 
-<% if @active_sessions.empty? && @past_sessions.empty? %>
-  <p>No sessions yet.</p>
-<% end %>
+    <div class="grid">
+      <% @active_sessions.each do |s| %>
+        <article>
+          <header>
+            <strong><%= s.title %></strong>
+            <small><%= s.start_date %> – <%= s.end_date %></small>
+          </header>
+
+          <footer>
+            <%= link_to "Open", plan_session_path(s), role: "button", class: "secondary" %>
+            <%= link_to "Recommendations", recommendations_plan_session_path(s), role: "button", class: "contrast" %>
+          </footer>
+        </article>
+      <% end %>
+    </div>
+  <% end %>
+
+  <% if @past_sessions.any? %>
+    <h3>Expired</h3>
+    <ul>
+      <% @past_sessions.each do |s| %>
+        <li>
+          <%= s.title %> —
+          <%= link_to "View", plan_session_path(s) %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <% if @active_sessions.empty? && @past_sessions.empty? %>
+    <p><em>No sessions yet.</em></p>
+  <% end %>
+</section>
