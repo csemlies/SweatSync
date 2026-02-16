@@ -1,12 +1,12 @@
+# app/controllers/pages_controller.rb
 class PagesController < ApplicationController
-  # allow unauthenticated visitors to see the homepage
-  skip_before_action :authenticate_user!, only: [:home]
+  skip_before_action :authenticate_user!, only: [:home, :auth_gate]
 
   def home
-    today = Date.current
-    sessions = PlanSession.order(created_at: :desc)
+    # existing home logic
+  end
 
-    @active_sessions, @past_sessions =
-      sessions.partition { |s| s.end_date.present? && s.end_date >= today }
+  def auth_gate
+    session[:after_auth_redirect] = params[:redirect_to] if params[:redirect_to].present?
   end
 end

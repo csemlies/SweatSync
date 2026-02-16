@@ -1,11 +1,9 @@
 <div class="container">
-  <!-- Hero -->
   <header>
     <h1>SweatSync</h1>
     <p class="lead">Plan workouts with friends without the group chat chaos.</p>
   </header>
 
-  <!-- How it works -->
   <section>
     <h2>How it works</h2>
 
@@ -27,12 +25,11 @@
     </div>
   </section>
 
-  <!-- CTA: placed *after* How it works -->
   <section style="margin-top: 2rem;">
     <% if user_signed_in? %>
-      <%= link_to "Create a session", new_plan_session_path, role: "button", class: "contrast" %>    <% else %>
-      <!-- If user is not signed in, send to login, then they'll be able to create -->
-      <%= link_to "Create a session", new_user_registration_path, role: "button", class: "contrast" %>
+      <%= link_to "Create a session", new_plan_session_path, class: "contrast", role: "button" %>
+    <% else %>
+      <%= link_to "Create a session", auth_gate_path(redirect_to: new_plan_session_path), class: "contrast", role: "button" %>
     <% end %>
   </section>
 </div>

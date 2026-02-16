@@ -1,0 +1,71 @@
+<div class="container">
+  <h1>Create an account or log in</h1>
+
+  <div class="grid" style="grid-template-columns: 1fr 340px; gap: 2rem; align-items:start;">
+    <!-- LEFT: Sign up -->
+    <section class="card" style="padding:1.5rem;">
+      <h2>Sign up</h2>
+
+      <%# build a new user resource for the Devise registration form %>
+      <% signup_user = User.new %>
+      <%= form_for(signup_user, as: :user, url: registration_path(:user)) do |f| %>
+        <%= devise_error_messages! %>
+
+        <div class="field">
+          <%= f.label :email %>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "input" %>
+        </div>
+
+        <div class="field">
+          <%= f.label :password %>
+          <em>(6 characters minimum)</em>
+          <%= f.password_field :password, autocomplete: "new-password", class: "input" %>
+        </div>
+
+        <div class="field">
+          <%= f.label :password_confirmation %>
+          <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "input" %>
+        </div>
+
+        <div class="field">
+          <%= f.label :username %>
+          <%= f.text_field :username, class: "input" %>
+        </div>
+
+        <div class="actions" style="margin-top: 1rem;">
+          <%= f.submit "Create account", class: "contrast" %>
+        </div>
+      <% end %>
+    </section>
+
+    <!-- RIGHT: Log in -->
+    <aside style="min-width:260px;">
+      <h3>Already have an account?</h3>
+
+      <%= form_with scope: :user, url: session_path(:user), local: true do |f| %>
+        <div class="field">
+          <%= f.label :email %>
+          <%= f.email_field :email, autocomplete: "email", class: "input" %>
+        </div>
+
+        <div class="field">
+          <%= f.label :password %>
+          <%= f.password_field :password, autocomplete: "current-password", class: "input" %>
+        </div>
+
+        <div class="field">
+          <label class="checkbox">
+            <%= f.check_box :remember_me %>
+            <%= f.label :remember_me %>
+          </label>
+        </div>
+
+        <div class="actions" style="margin-top: 1rem;">
+          <%= f.submit "Log in", class: "contrast" %>
+        </div>
+      <% end %>
+
+      <p style="margin-top:1rem;"><%= link_to "Forgot your password?", new_user_password_path %></p>
+    </aside>
+  </div>
+</div>

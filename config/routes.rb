@@ -17,6 +17,8 @@ Rails.application.routes.draw do
 
   get "/profile", to: "users#show", as: :profile
 
+  get "auth_gate", to: "pages#auth_gate", as: :auth_gate
+
   # join via invite token
   get  "join", to: "invites#new"
   post "join", to: "invites#create"
