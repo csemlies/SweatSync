@@ -1,15 +1,40 @@
-<div class="container">
-  <h1><%= @user.username.presence || @user.email %>'s profile</h1>
+<h1><%= @user.display_name || @user.username || @user.name || @user.email.split('@').first %></h1>
 
-  <dl>
-    <dt>Email</dt>
-    <dd><%= @user.email %></dd>
-
-    <dt>Username</dt>
-    <dd><%= @user.username.presence || "—" %></dd>
-  </dl>
-
-  <% if @user == current_user %>
-    <%= link_to "Edit profile", edit_user_registration_path, class: "button" %>
+<section>
+  <h2>Active sessions</h2>
+  <% if @active_sessions.any? %>
+    <ul>
+      <% @active_sessions.each do |session| %>
+        <li style="margin-bottom: .75rem;">
+          <strong><%= link_to session.title || "Session ##{session.id}", plan_session_path(session) %></strong>
+          <div style="font-size: .95rem; color: #888;">
+            <%= session.start_time.present? ? session.start_time.strftime("%b %e, %Y — %l:%M %p") : "Date TBA" %>
+            &nbsp;•&nbsp;
+            <%= @session_roles[session.id] == :host ? "Host" : "Member" %>
+          </div>
+          <% if session.location.present? %>
+            <div style="font-size:.9rem; color:#aaa"><%= session.location %></div>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>No upcoming sessions yet. <%= link_to "Create one", new_plan_session_path %></p>
   <% end %>
-</div>
+</section>
+
+<section style="margin-top:2rem;">
+  <h2>Expired sessions</h2>
+  <% if @expired_sessions.any? %>
+    <ul>
+      <% @expired_sessions.each do |session| %>
+        <li style="margin-bottom:.6rem;">
+          <%= link_to(session.title || "Session ##{session.id}", plan_session_path(session)) %>
+          &nbsp;—&nbsp;<small><%= @session_roles[session.id] == :host ? "Host" : "Member" %></small>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>No expired sessions yet.</p>
+  <% end %>
+</section>
