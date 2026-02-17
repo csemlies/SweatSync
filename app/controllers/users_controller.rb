@@ -1,5 +1,9 @@
-# app/controllers/users_controller.rb
-def show
-  @user = User.find(params[:id])
-  @owned_sessions = @user.plan_sessions.order(start_time: :desc) 
+class UsersController < ApplicationController
+  before_action :authenticate_user!, only: [:show]
+
+  def show
+    @user = params[:id].present? ? User.find(params[:id]) : current_user
+
+    @owned_sessions = @user.plan_sessions.order(start_time: :desc)
+  end
 end

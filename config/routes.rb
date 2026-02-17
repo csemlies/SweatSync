@@ -15,15 +15,13 @@ Rails.application.routes.draw do
     root to: "pages#home", as: :unauthenticated_root
   end
 
-  get "/profile", to: "users#show", as: :profile
+  get '/profile', to: 'users#show', as: :profile
 
   get "auth_gate", to: "pages#auth_gate", as: :auth_gate
 
-  # join via invite token
   get  "join", to: "invites#new"
   post "join", to: "invites#create"
 
-  # sessions (PlanSession)
   resources :plan_sessions, path: "sessions" do
     get :recommendations, on: :member
     resources :busy_blocks, only: [:new, :create, :destroy] do

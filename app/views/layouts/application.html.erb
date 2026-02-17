@@ -15,21 +15,28 @@
   </head>
 
   <body>
-    <!-- top nav -->
+    <!-- top nav (pico-friendly) -->
     <header class="container" style="margin-top: 1rem;">
-      <nav role="navigation">
+      <nav role="navigation" aria-label="Main navigation">
         <ul>
           <li><a href="<%= root_path %>" style="text-decoration:none;"><strong>SweatSync</strong></a></li>
         </ul>
 
-        <ul style="float:right; list-style:none;">
+        <ul style="float:right; list-style:none; margin:0; padding:0;">
           <% if user_signed_in? %>
-            <li style="display:inline; margin-left:1rem;">
-              <%= link_to "Profile", profile_path %>
-            </li>
+            <%# compute profile link (use profile_path if defined, otherwise user_path(current_user)) %>
+            <% profile_link_path = (defined?(profile_path) ? profile_path : user_path(current_user)) %>
+
+            <% unless current_page?(profile_link_path) %>
+              <li style="display:inline; margin-left:1rem;">
+                <%= link_to "Profile", profile_link_path %>
+              </li>
+            <% end %>
+
             <li style="display:inline; margin-left:1rem;">
               <%= link_to "Edit profile", edit_user_registration_path %>
             </li>
+
             <li style="display:inline; margin-left:1rem;">
               <%= link_to "Sign out", destroy_user_session_path, method: :delete, data: { confirm: "Sign out?" } %>
             </li>
@@ -45,11 +52,11 @@
       </nav>
     </header>
 
-    <main class="container">
+    <main class="container" style="margin-top: 1rem;">
       <% if flash.any? %>
         <section>
-          <% flash.each do |k,v| %>
-            <div style="color: <%= (k == 'notice' ? 'green' : 'red') %>;"><%= v %></div>
+          <% flash.each do |k, v| %>
+            <div style="color: <%= (k.to_s == 'notice' ? 'green' : 'red') %>;"><%= v %></div>
           <% end %>
         </section>
       <% end %>
@@ -57,9 +64,8 @@
       <%= yield %>
     </main>
 
-    <!-- footer (single copy, styled by Pico) -->
     <footer class="container" style="margin-top: 2rem;">
-
+      <!-- footer content if you want -->
     </footer>
   </body>
 </html>
