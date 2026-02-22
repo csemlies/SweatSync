@@ -3,8 +3,6 @@ Rails.application.routes.draw do
   registrations: "users/registrations",
   sessions: "users/sessions"
 }
-
-  # top-level root so root_path exists everywhere
   root to: "pages#home"
 
   authenticated :user do
@@ -16,6 +14,7 @@ Rails.application.routes.draw do
   end
 
   get '/profile', to: 'users#show', as: :profile
+  resources :users, only: [:show, :edit, :update, :destroy]
 
   get "auth_gate", to: "pages#auth_gate", as: :auth_gate
 

@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  before_action :authenticate_user!           # ensure Devise user
   before_action :set_user, only: [:show]
 
   def show
@@ -20,13 +21,24 @@ class UsersController < ApplicationController
 
     @session_roles = {}
     all_sessions.each do |s|
-      @session_roles[s.id] = (s.user_id == @user.id ? :host : :member) rescue :member
+      # clearer, safer role assignment
+      @session_roles[s.id] = (s.user_id == @user.id ? :host : :member)
     end
   end
 
   private
 
   def set_user
-    @user = User.find(params[:id])
+    # prefer explicit id if provided, otherwise show the signed-in user
+    if params[:id].present?
+      @user = User.find_by(id: params[:id])
+    else
+      @user = current_user
+    end
+
+    unless @user
+      # redirect instead of raising ActiveRecord::RecordNotFound
+      redirect_to root_path, alert: "User not found or you must sign in."
+    end
   end
 end

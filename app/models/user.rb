@@ -29,5 +29,16 @@ class User < ApplicationRecord
 
   has_many :session_members, dependent: :destroy
   has_many :plan_sessions, through: :session_members
-end
 
+  def display_name
+    self[:display_name].presence ||
+      username.presence ||
+      name.presence ||
+      (email.present? ? email.split('@').first : nil)
+  end
+
+  # Optional: string representation of the user
+  def to_s
+    display_name || "User##{id}"
+  end
+end
