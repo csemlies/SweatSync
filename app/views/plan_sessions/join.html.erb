@@ -1,0 +1,21 @@
+<h1>Join a Session</h1>
+
+<% if flash[:notice] %>
+  <p style="color: #2a7;"> <%= flash[:notice] %> </p>
+<% end %>
+
+<% if flash[:alert] %>
+  <p style="color: #c33;"> <%= flash[:alert] %> </p>
+<% end %>
+
+<p>Paste the invite link or token your friend sent you.</p>
+
+<form action="<%= join_lookup_path %>" method="post">
+  <%= csrf_meta_tags %>
+
+  <label>Invite link or token</label><br>
+  <input type="text" name="join_input" placeholder="https://.../join?token=ABC123 or ABC123" required />
+
+  <br><br>
+  <button type="submit" class="contrast">Join</button>
+</form>

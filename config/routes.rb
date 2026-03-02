@@ -18,8 +18,8 @@ Rails.application.routes.draw do
 
   get "auth_gate", to: "pages#auth_gate", as: :auth_gate
 
-  get  "join", to: "invites#new"
-  post "join", to: "invites#create"
+  get  "/join",        to: "plan_sessions#join",      as: :join
+  post "/join_lookup", to: "plan_sessions#lookup",    as: :join_lookup
 
   resources :plan_sessions, path: "sessions" do
     get :recommendations, on: :member
